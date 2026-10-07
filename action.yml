@@ -1,0 +1,8 @@
+name: Dummy Action
+description: Dummy composite action for tag ruleset PoC.
+
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      run: echo "dummy action version 1.0"

