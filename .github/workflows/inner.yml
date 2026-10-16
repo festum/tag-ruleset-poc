@@ -1,0 +1,11 @@
+name: inner
+
+on:
+  workflow_call:
+
+jobs:
+  work:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: echo "inner ran with a step-level TAG ref"
