@@ -1,0 +1,31 @@
+name: sha-pinning-matrix
+
+on:
+  workflow_dispatch:
+
+jobs:
+  m1-step-self-action-tag:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: festum/tag-ruleset-poc@v1.0
+
+  m2-step-self-action-sha:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: festum/tag-ruleset-poc@420753cc0f8f7f3525a26d1f16b8f6339db2d60f
+
+  m3-step-thirdparty-tag:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+  m4-step-thirdparty-sha:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+
+  m5-job-reusable-self-tag:
+    uses: festum/tag-ruleset-poc/.github/workflows/reusable.yml@pin-test-1
+
+  m6-job-reusable-self-sha:
+    uses: festum/tag-ruleset-poc/.github/workflows/reusable.yml@420753cc0f8f7f3525a26d1f16b8f6339db2d60f
